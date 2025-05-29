@@ -38,4 +38,9 @@
 |HoaDonChangTea|Bảng chứa các hóa đơn mà khách hàng đã đặt| idKH, idHD, thoiGian, tongTien, ghiChu|
 |CTHDChangTea|Bảng chứa chi tiết các món của 1 hóa đơn| idHD, idMon, soLuong, size|
 
+📝*Nền tảng [Supabase](https://supabase.com/)*: Tổ chức và lưu trữ cơ sở dữ liệu
+
+---
+## 🖼️ Ảnh minh họa cho ứng dụng
+![image](https://github.com/user-attachments/assets/61d5af1f-d6e5-4119-9024-f92bd2f3b034)
 
