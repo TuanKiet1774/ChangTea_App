@@ -28,3 +28,14 @@
 
 ## 🗃️Cơ sở dữ liệu
 ![image](https://github.com/user-attachments/assets/5877cd2d-77c3-401a-a8f2-4b094db694e6)
+
+| Tên bảng| Chức năng| Các trường|
+|---|---|---|
+|TraSuaChangTea| Bảng chứa dữ liệu tất cả các món của quán (Trà sữa, trà trái cây, đồ ăn)| id, ten, gia, moTa, anh, danhGia, tag, loai|
+|ToppingChangTea|Bảng chứa dữ liệu các topping của quán| id, ten, gia|
+|KhachHangChangTea| Bảng chứa thông tin các khách hàng của quán| idKH, tenKH, diaChi, sdt|
+|GioHangChangTea| Bảng chứa các món được khách hàng thêm vào giỏ hàng| idKH, idMon, soLuong, size, mucDa, topping, giaTopping|
+|HoaDonChangTea|Bảng chứa các hóa đơn mà khách hàng đã đặt| idKH, idHD, thoiGian, tongTien, ghiChu|
+|CTHDChangTea|Bảng chứa chi tiết các món của 1 hóa đơn| idHD, idMon, soLuong, size|
+
+
