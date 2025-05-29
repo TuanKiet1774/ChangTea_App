@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "224302298852",
+    "project_id": "changtea2025",
+    "storage_bucket": "changtea2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224302298852:android:5ceb90c6b8e6975a859ef1",
+        "android_client_info": {
+          "package_name": "vn.edu.ntu.changtea.changtea"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCstesfsr77QAqQ12VHeJDK3S4PTdr3gLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
