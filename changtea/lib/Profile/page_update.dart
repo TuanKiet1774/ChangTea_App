@@ -14,7 +14,7 @@ class PageUpdateProfile extends StatefulWidget {
 
 class _EditProfilePageState extends State<PageUpdateProfile> {
   TextEditingController tenController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  // TextEditingController emailController = TextEditingController();
   TextEditingController diaChiController = TextEditingController();
   TextEditingController sdtController = TextEditingController();
 
@@ -91,7 +91,6 @@ class _EditProfilePageState extends State<PageUpdateProfile> {
             SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
-                //Thong bao dang cap nhat
                 UserChangTea userChangtea = widget.userChangTea;
                 userChangtea.tenKH = tenController.text;
                 userChangtea.diaChi = diaChiController.text;

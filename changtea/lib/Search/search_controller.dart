@@ -39,7 +39,7 @@ class lichSuTimKiem extends GetxController {
   void layMenu() async {
     List<Mon> allItems = await ChangTeaSnapshot.getMon();
     dsDeXuat.value = allItems;
-    dsDeXuatFilter.value = allItems;
+    // dsDeXuatFilter.value = allItems;
   }
 
   void addTimKiem(String txt) {

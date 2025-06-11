@@ -72,9 +72,6 @@ class _SearchChangTeaState extends State<SearchChangTea> {
             SizedBox(height: 20),
             Divider(),
             //Hiển thị lịch sử tìm kiếm nếu chưa nhập bất kỳ từ khóa nào
-            //Hiển thị đề xuất các món nếu nhập ký tự
-
-            //lichSuTimKiem ds = Get.put(lichSuTimKiem());
             Expanded(
               child: Obx(() {
                 if (txtSearch.text.isEmpty) {

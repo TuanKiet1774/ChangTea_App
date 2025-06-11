@@ -179,7 +179,7 @@ class _InvoicePageState extends State<InvoicePage> {
               ],
             ),
             Divider(),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -231,7 +231,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 35),
           ],
         ),
       ),

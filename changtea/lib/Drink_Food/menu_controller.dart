@@ -20,204 +20,206 @@ Widget drinksOption(Mon d, String size, double price) {
   String chonSize = 'M';
   late Future<List<CartItem>> dsCart;
 
-  return SingleChildScrollView(
-    child: StatefulBuilder(
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: double.infinity,
-                        height: 110,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: Image.network(
-                            d.anh ?? "link ảnh mặc định",
-                            fit: BoxFit.cover,
+  return SafeArea(
+    child: SingleChildScrollView(
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          height: 110,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            child: Image.network(
+                              d.anh ?? "link ảnh mặc định",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            d.ten,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            d.moTa ?? "Chưa có mô tả",
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ],
+                      SizedBox(width: 10),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              d.ten,
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              d.moTa ?? "Chưa có mô tả",
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        )
                       )
+                    ],
+                  ),
+                ),
+                Divider(),
+                // Mức đá
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Mức Đá", style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                Column(
+                  children: ["Đá chung", "Đá riêng", "Ít đá"].map((mucDa) {
+                    return CheckboxListTile(
+                      value: chonMucDa == mucDa,
+                      onChanged: (_) {
+                        setState(() {
+                          chonMucDa = mucDa;
+                        });
+                      },
+                      title: Text(mucDa),
+                    );
+                  }).toList(),
+                ),
+                // Topping
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Topping", style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                // Hiển thị danh sách topping để chọn
+                FutureBuilder<List<Topping>>(
+                  future: dsTopping,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Lỗi: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('Không có topping nào.'));
+                    }
+    
+                    final toppings = snapshot.data!;
+                    return Column(
+                      children: toppings.map((tp) {
+                        return CheckboxListTile(
+                          title: Text(tp.ten),
+                          subtitle: Text('${tp.gia}đ'),
+                          value: chonTP.contains(tp),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              if (value == true) {
+                                chonTP.add(tp);
+                                ChangTeaSnapshot.addTopping(tp, chonTP);
+                              } else {
+                                chonTP.remove(tp);
+                              }
+                              // Cập nhật giá của topping đã chọn
+                              sumTP = ChangTeaSnapshot.tinhTongGiaTopping(chonTP);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Size ", style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                Row(
+                  children: d.gia.keys.map((size) {
+                    return Row(
+                      children: [
+                        Radio<String>(
+                          value: size,
+                          groupValue: chonSize,
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                chonSize = value;
+                              });
+                            }
+                          },
+                        ),
+                        Text(size),
+                        SizedBox(width: 30,)
+                      ],
+                    );
+                  }).toList(),
+                ),
+                // Chọn số lượng
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Số lượng:"),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () {
+                            if (soLuongMon > 1) setState(() => soLuongMon--);
+                          },
+                        ),
+                        Text('$soLuongMon'),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () => setState(() => soLuongMon++),
+                        ),
+                      ],
                     )
                   ],
                 ),
-              ),
-              Divider(),
-              // Mức đá
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Mức Đá", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Column(
-                children: ["Đá chung", "Đá riêng", "Ít đá"].map((mucDa) {
-                  return CheckboxListTile(
-                    value: chonMucDa == mucDa,
-                    onChanged: (_) {
-                      setState(() {
-                        chonMucDa = mucDa;
-                      });
+                SizedBox(height: 10),
+                // Thêm vào giỏ hàng
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                    ),
+                    onPressed: () async {
+                      if (supabase.auth.currentUser == null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PageAuthMilktea()),
+                        );
+                      } else {
+                        Navigator.pop(context);
+    
+                        String chuoiTopping = chonTP.map((tp) => tp.ten).join(', ');
+                        double giaTopping = chonTP.fold(0, (sum, tp) => sum + tp.gia);
+                        CartItem c = new CartItem(
+                            mon: d,
+                            soLuong: soLuongMon,
+                            size: chonSize,
+                            mucDa: chonMucDa,
+                            topping: chuoiTopping,
+                            giaTopping: giaTopping
+                        );
+                        await CartSnapshot.insertCart(c);
+    
+                        setState(() {
+                          dsCart = CartSnapshot.getCart();
+                        });
+                      }
                     },
-                    title: Text(mucDa),
-                  );
-                }).toList(),
-              ),
-              // Topping
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Topping", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              // Hiển thị danh sách topping để chọn
-              FutureBuilder<List<Topping>>(
-                future: dsTopping,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Lỗi: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('Không có topping nào.'));
-                  }
-
-                  final toppings = snapshot.data!;
-                  return Column(
-                    children: toppings.map((tp) {
-                      return CheckboxListTile(
-                        title: Text(tp.ten),
-                        subtitle: Text('${tp.gia}đ'),
-                        value: chonTP.contains(tp),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value == true) {
-                              chonTP.add(tp);
-                              ChangTeaSnapshot.addTopping(tp, chonTP);
-                            } else {
-                              chonTP.remove(tp);
-                            }
-                            // Cập nhật giá của topping đã chọn
-                            sumTP = ChangTeaSnapshot.tinhTongGiaTopping(chonTP);
-                          });
-                        },
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Size ", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Row(
-                children: d.gia.keys.map((size) {
-                  return Row(
-                    children: [
-                      Radio<String>(
-                        value: size,
-                        groupValue: chonSize,
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              chonSize = value;
-                            });
-                          }
-                        },
-                      ),
-                      Text(size),
-                      SizedBox(width: 30,)
-                    ],
-                  );
-                }).toList(),
-              ),
-              // Chọn số lượng
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Số lượng:"),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          if (soLuongMon > 1) setState(() => soLuongMon--);
-                        },
-                      ),
-                      Text('$soLuongMon'),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () => setState(() => soLuongMon++),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(height: 10),
-              // Thêm vào giỏ hàng
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
+                    child: Text(
+                      "Thêm vào giỏ hàng - ${(sumTP + (d.gia[chonSize]!)) * soLuongMon}đ",
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
-                  onPressed: () async {
-                    if (supabase.auth.currentUser == null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PageAuthMilktea()),
-                      );
-                    } else {
-                      Navigator.pop(context);
-
-                      String chuoiTopping = chonTP.map((tp) => tp.ten).join(', ');
-                      double giaTopping = chonTP.fold(0, (sum, tp) => sum + tp.gia);
-                      CartItem c = new CartItem(
-                          mon: d,
-                          soLuong: soLuongMon,
-                          size: chonSize,
-                          mucDa: chonMucDa,
-                          topping: chuoiTopping,
-                          giaTopping: giaTopping
-                      );
-                      await CartSnapshot.insertCart(c);
-
-                      setState(() {
-                        dsCart = CartSnapshot.getCart();
-                      });
-                    }
-                  },
-                  child: Text(
-                    "Thêm vào giỏ hàng - ${(sumTP + (d.gia[chonSize]!)) * soLuongMon}đ",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
+                )
+              ],
+            ),
+          );
+        },
+      ),
     ),
   );
 }
@@ -228,118 +230,120 @@ Widget foodsOption(Mon d, String size, double price) {
   String chonSize = 'M';
   late Future<List<CartItem>> dsCart;
 
-  return SingleChildScrollView(
-    child: StatefulBuilder(
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: double.infinity,
-                        height: 110,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: Image.network(
-                            d.anh ?? "link ảnh mặc định",
-                            fit: BoxFit.cover,
+  return SafeArea(
+    child: SingleChildScrollView(
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          height: 110,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            child: Image.network(
+                              d.anh ?? "link ảnh mặc định",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            d.ten,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            d.moTa ?? "Chưa có mô tả",
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ],
+                      SizedBox(width: 10),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              d.ten,
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              d.moTa ?? "Chưa có mô tả",
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        )
                       )
+                    ],
+                  ),
+                ),
+                Divider(),
+                // Chọn số lượng
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Số lượng:"),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () {
+                            if (soLuongMon > 1) setState(() => soLuongMon--);
+                          },
+                        ),
+                        Text('$soLuongMon'),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () => setState(() => soLuongMon++),
+                        ),
+                      ],
                     )
                   ],
                 ),
-              ),
-              Divider(),
-              // Chọn số lượng
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Số lượng:"),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          if (soLuongMon > 1) setState(() => soLuongMon--);
-                        },
-                      ),
-                      Text('$soLuongMon'),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () => setState(() => soLuongMon++),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(height: 10),
-              // Thêm vào giỏ hàng
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  onPressed:  () async {
-                    if (supabase.auth.currentUser == null) {
-                      // Nếu chưa đăng nhập → chuyển đến trang đăng nhập
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PageAuthMilktea()),
-                      );
-                    }
-                    else {
-                      Navigator.pop(context);
+                SizedBox(height: 10),
+                // Thêm vào giỏ hàng
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                    onPressed:  () async {
+                      if (supabase.auth.currentUser == null) {
+                        // Nếu chưa đăng nhập → chuyển đến trang đăng nhập
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PageAuthMilktea()),
+                        );
+                      }
+                      else {
+                        Navigator.pop(context);
 
-                      CartItem c = new CartItem(
-                          mon: d,
-                          soLuong: soLuongMon,
-                          size: size,
-                          mucDa: '',
-                          topping: '',
-                          giaTopping: 0
-                      );
-                      await CartSnapshot.insertCart(c);
+                        CartItem c = new CartItem(
+                            mon: d,
+                            soLuong: soLuongMon,
+                            size: size,
+                            mucDa: '',
+                            topping: '',
+                            giaTopping: 0
+                        );
+                        await CartSnapshot.insertCart(c);
 
-                      setState(() {
-                        dsCart = CartSnapshot.getCart();
-                      });
-                    }
-                  },
-                  child: Text(
-                    "Thêm vào giỏ hàng - ${(sumTP + (d.gia[chonSize]!)) * soLuongMon}đ",
-                    style: TextStyle(fontSize: 16),
+                        setState(() {
+                          dsCart = CartSnapshot.getCart();
+                        });
+                      }
+                    },
+                    child: Text(
+                      "Thêm vào giỏ hàng - ${(sumTP + (d.gia[chonSize]!)) * soLuongMon}đ",
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     ),
   );
 }
