@@ -87,7 +87,6 @@ class PageVerifyOTP extends StatelessWidget {
                     UserChangTea(idKH: idKH, tenKH: "", diaChi: "", sdt: "")
                 );
 
-                // Điều hướng sang trang Profile
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => HomePage()),
                       (route) => false,

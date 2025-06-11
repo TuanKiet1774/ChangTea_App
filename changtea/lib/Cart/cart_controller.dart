@@ -108,7 +108,6 @@ class CartController extends GetxController {
     return total;
   }
 
-  // Tổng tiền các mặt hàng đã chọn trong Giỏ hàng
   double tinhTongTien(Map choMH) {
     double tong = 0;
     choMH.forEach((key, isSelected) {

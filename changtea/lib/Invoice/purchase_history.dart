@@ -45,7 +45,7 @@ class _PurchaseHistoryState extends State<PurchaseHistory> {
           return ListView.builder(
             itemCount: hoaDons.length,
             itemBuilder: (context, index) {
-              final hoaDon = hoaDons[index];
+              final hoaDon = hoaDons[hoaDons.length - 1 - index];
               Future<List<CTHD>> ds = CTHDSnapshot.getDetailInvoice(hoaDon.idHD.toString());
               return GestureDetector(
                 onTap: () {

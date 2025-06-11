@@ -17,7 +17,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   var monGioHang = Get.put(CartController());
   late Future<List<CartItem>> dsCart;
-  //Đối tượng đăng ký lắng nghe sự kiện thay đổi trạng thái xác thực (AuthState) từ Supabase.
+
   late final StreamSubscription<AuthState> _listenAuth;
   Map<int, bool> selectedItems = {};
 

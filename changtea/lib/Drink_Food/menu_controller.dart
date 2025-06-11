@@ -10,7 +10,6 @@ import 'chitiet_mon/chitiet_food.dart';
 import 'menu_model.dart';
 
 final supabase = Supabase.instance.client;
-
 Widget drinksOption(Mon d, String size, double price) {
   String chonMucDa = '';
   int soLuongMon = 1;
@@ -184,7 +183,7 @@ Widget drinksOption(Mon d, String size, double price) {
                     backgroundColor: Colors.orange,
                   ),
                   onPressed: () async {
-                    if (user == null) {
+                    if (supabase.auth.currentUser == null) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => PageAuthMilktea()),
@@ -197,7 +196,7 @@ Widget drinksOption(Mon d, String size, double price) {
                       CartItem c = new CartItem(
                           mon: d,
                           soLuong: soLuongMon,
-                          size: size,
+                          size: chonSize,
                           mucDa: chonMucDa,
                           topping: chuoiTopping,
                           giaTopping: giaTopping
@@ -306,7 +305,7 @@ Widget foodsOption(Mon d, String size, double price) {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                   onPressed:  () async {
-                    if (user == null) {
+                    if (supabase.auth.currentUser == null) {
                       // Nếu chưa đăng nhập → chuyển đến trang đăng nhập
                       Navigator.push(
                         context,

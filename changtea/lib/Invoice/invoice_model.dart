@@ -4,13 +4,13 @@ import '../Drink_Food/chitiet_mon/chitiet_drink.dart';
 import '../Drink_Food/menu_model.dart';
 
 class HoaDon {
-  final String? idHD; // nullable vì Supabase sẽ tự sinh
+  final String? idHD;
   final double tongTien;
   final DateTime thoiGian;
   final String ghiChu;
 
   HoaDon({
-    this.idHD, // bỏ không cần truyền nếu tự sinh
+    this.idHD,
     required this.tongTien,
     required this.thoiGian,
     required this.ghiChu,
@@ -20,7 +20,7 @@ class HoaDon {
     return HoaDon(
       idHD: map['idHD'],
       tongTien: (map['tongTien'] as num).toDouble(),
-      thoiGian: DateTime.parse(map['thoiGian']), // ✅ convert từ string → DateTime
+      thoiGian: DateTime.parse(map['thoiGian']),
       ghiChu: map['ghiChu'] ?? "",
     );
   }
