@@ -26,7 +26,7 @@
 
 ---
 
-## 🗃️Cơ sở dữ liệu
+## 🗄️Cơ sở dữ liệu
 ![image](https://github.com/user-attachments/assets/5877cd2d-77c3-401a-a8f2-4b094db694e6)
 
 | Tên bảng| Chức năng| Các trường|
@@ -39,6 +39,48 @@
 |CTHDChangTea|Bảng chứa chi tiết các món của 1 hóa đơn| idHD, idMon, soLuong, size|
 
 📝*Nền tảng [Supabase](https://supabase.com/)*: Tổ chức và lưu trữ cơ sở dữ liệu
+
+---
+## 🗃️Cấu trúc Src Code
+
+```
+lib
+├─ Cart
+│  ├─ cart.dart
+│  ├─ cart_controller.dart
+│  └─ cart_model.dart
+├─ Drink_Food
+│  ├─ chitiet_mon
+│  │  ├─ chitiet_drink.dart
+│  │  ├─ chitiet_food.dart
+│  │  └─ chitiet_item.dart
+│  ├─ menu
+│  │  ├─ menu_anvat.dart
+│  │  ├─ menu_trasua.dart
+│  │  └─ menu_tratraicay.dart
+│  ├─ menu_controller.dart
+│  └─ menu_model.dart
+├─ HomeChangTea
+│  ├─ home.dart
+│  └─ home_controller.dart
+├─ Invoice
+│  ├─ bill_detail.dart
+│  ├─ invoice_model.dart
+│  ├─ page_invoice.dart
+│  └─ purchase_history.dart
+├─ main.dart
+├─ Profile
+│  ├─ page_profile.dart
+│  ├─ page_update.dart
+│  ├─ profile_controller.dart
+│  ├─ profile_model.dart
+│  └─ signin_out.dart
+└─ Search
+   ├─ search.dart
+   ├─ search_controller.dart
+   └─ search_result.dart
+
+```
 
 ---
 ## 🖼️ Ảnh minh họa cho ứng dụng
